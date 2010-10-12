@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <error.h>
 #include <assert.h>
 #include <unistd.h>
 #include <errno.h>
@@ -38,5 +40,5 @@ class HelloSocket
 /*
 		std::string &getMyIp();
 		std::string &getPeerIp();*/
-		std::string response();
+		char * response();
 };
