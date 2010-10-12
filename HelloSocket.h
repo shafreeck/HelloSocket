@@ -33,7 +33,7 @@ class HelloSocket
 		HelloSocket &listen(); //bind and listen
 		HelloSocket &accept(); // accept connections
 		HelloSocket &read();  // read network data
-		HelloSocket &send(std::string msg="");  // read network data
+		HelloSocket &send(char * data,size_t len);  // read network data
 		HelloSocket &connect();  // connect to server
 /*
 		std::string &getMyIp();

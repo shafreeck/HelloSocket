@@ -100,14 +100,44 @@ HelloSocket & HelloSocket::accept()
 }
 HelloSocket & HelloSocket::read()
 {
+	int cur = 0;
+	int nrecv = 0 ;
+	int const len = 128;
+	while(true)
+	{
+		if(cur > BUF_SIZE){pLog("error: no enough memory");}
+		nrecv = ::recv(m_rwfd,m_sdata+cur,len,0);
+		if(nrecv == -1)
+		{
+			perror("recv");
+			break;
+		}
+		else if(nrecv == len) cur += nrecv ;
+		else if(nrecv < len)break;
+	}
+	m_sdata[cur] = 0;
+
 	return *this;
 }
-HelloSocket & HelloSocket::send(string msg)
+HelloSocket & HelloSocket::send(char *data,size_t len)
 {
-	int error_code = ::send(m_rwfd,msg.c_str(),msg.size(),0);
-	if(error_code == -1)
+	if(!data)return *this;
+	int nsend = 0;
+	int cur = 0;
+	while(true) // loop until send complete
 	{
-		perror("send");
+		nsend = ::send(m_rwfd,data+cur,len,0);
+		if(nsend == -1)
+		{
+			perror("send");
+			break;
+		}
+		else if(nsend < len)
+		{
+			len -= nsend ;
+			cur += nsend;
+		}
+		else if(nsend == len) break;
 	}
 	return *this;
 }
@@ -121,7 +151,7 @@ void * HelloSocket::sockAddr(struct sockaddr * saddr)
 	{
 		return &(((struct sockaddr_in *)saddr)->sin_addr);
 	}
-		return &(((struct sockaddr_in6 *)saddr)->sin6_addr);
+	return &(((struct sockaddr_in6 *)saddr)->sin6_addr);
 }
 HelloSocket::~HelloSocket()
 {

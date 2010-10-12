@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	hs.accept();   // wait to connection
 	hs.read();
 	//cout<<hs.response()<<endl;
-	hs.send("hello");
+	hs.send("hello",sizeof("hello"));
 	hs.read();
 	//cout<<hs.response()<<endl;
 	return 0;
